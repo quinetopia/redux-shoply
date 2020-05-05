@@ -1,0 +1,16 @@
+.cartCount {
+  font-weight: bold;
+  padding-right: 20px;
+  padding-top: 20px;
+  background-color: lightblue;
+  display: flex;
+  justify-content: space-between;
+}
+
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}

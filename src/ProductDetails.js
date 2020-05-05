@@ -1,8 +1,9 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import "./Product.css";
 import { addToCart, takeFromCart } from "./actions.js";
-import { Link } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
+import CartCount from "./CartCount";
 
 // Product structure:
 // "name": "tv",
@@ -15,9 +16,20 @@ and creates product component
 with details
 and an add to/remove from cart
 */
-function Product({ product: { name, price, image_url }, productId }) {
+function ProductDetails() {
   const dispatch = useDispatch();
-  const cart = useSelector((st) => st.cart);
+  const { productId } = useParams();
+  const { products, cart } = useSelector(
+    (st) => ({
+      products: st.products,
+      cart: st.cart,
+    }),
+    shallowEqual
+  );
+
+  const product = products[productId];
+  if (!product) return <Redirect to="/" />;
+  const { name, price, description, image_url } = product;
 
   const handleAddClick = () => {
     console.log(`Should add ${productId} to the cart soon!`);
@@ -31,13 +43,13 @@ function Product({ product: { name, price, image_url }, productId }) {
 
   return (
     <div className="Product-view">
-      <Link to={`products/${productId}`}>
-        <img src={image_url} alt={name} />
-        <div className="details">
-          <h3>{name}</h3>
-          <h3>${price}</h3>
-        </div>
-      </Link>
+      <CartCount />
+      <img src={image_url} alt={name} />
+      <div className="details">
+        <h3>{name}</h3>
+        <h3>${price}</h3>
+        <h4>{description}</h4>
+      </div>
       <button className="Product-add-btn" onClick={handleAddClick}>
         +
       </button>
@@ -48,4 +60,4 @@ function Product({ product: { name, price, image_url }, productId }) {
   );
 }
 
-export default Product;
+export default ProductDetails;

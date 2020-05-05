@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "./Product.css";
+import "./CartItem.css";
 import { addToCart, takeFromCart } from "./actions.js";
 import { Link } from "react-router-dom";
 
@@ -15,7 +15,7 @@ and creates product component
 with details
 and an add to/remove from cart
 */
-function Product({ product: { name, price, image_url }, productId }) {
+function CartItem({ product: { name, price, image_url }, productId, qty }) {
   const dispatch = useDispatch();
   const cart = useSelector((st) => st.cart);
 
@@ -30,22 +30,25 @@ function Product({ product: { name, price, image_url }, productId }) {
   };
 
   return (
-    <div className="Product-view">
+    <div className="Cart-view">
       <Link to={`products/${productId}`}>
         <img src={image_url} alt={name} />
-        <div className="details">
-          <h3>{name}</h3>
-          <h3>${price}</h3>
-        </div>
       </Link>
-      <button className="Product-add-btn" onClick={handleAddClick}>
+      <div className="details">
+        <h3>{name}</h3>
+        <h3>Each: ${price}</h3>
+        <h3>qty:{qty}</h3>
+      </div>
+
+      <button className="Cart-add-btn" onClick={handleAddClick}>
         +
       </button>
-      <button className="Product-minus-btn" onClick={handleMinusClick}>
+      <button className="Cart-minus-btn" onClick={handleMinusClick}>
         -
       </button>
+      <h3>Cost: ${price * qty}</h3>
     </div>
   );
 }
 
-export default Product;
+export default CartItem;
